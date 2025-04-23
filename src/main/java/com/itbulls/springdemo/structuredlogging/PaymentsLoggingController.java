@@ -18,7 +18,6 @@ public class PaymentsLoggingController {
 
     @GetMapping("/payments-logging")
     public String getPayments() {
-    	System.out.println("hey");
     	log.info("Getting payments");
         return "Payment OK → " + restTemplate.getForObject("http://localhost:8081/fraud-check", String.class);
     }

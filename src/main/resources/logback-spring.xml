@@ -1,49 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
-	<springProperty scope="context" name="LOG_FILE_PATH" source="logging.file.name" defaultValue="logs/app-log.json"/>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
+    <!-- Подключаем переменную из application.properties -->
+    <springProperty scope="context" name="LOG_FILE_PATH" source="logging.file.name" defaultValue="logs/app-log.json"/>
+
+    <!-- JSON в консоль -->
     <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
-                <!-- Timestamp -->
-                <timestamp>
-                    <timeZone>UTC</timeZone>
-                </timestamp>
-
-                <!-- Log level -->
-                <logLevel />
-
-                <!-- Logger name -->
-                <loggerName />
-
-                <!-- Thread name -->
-                <threadName />
-
-                <!-- Message -->
-                <message />
-
-                <!-- Formatted message -->
-                <formattedMessage />
-
-                <!-- Mapped diagnostic context (MDC) -->
-                <mdc />
-
-                <!-- Stack trace if exception occurs -->
-                <stackTrace />
-
-                <!-- Context info (like application name) -->
-                <context />
-
-                <!-- Custom fields -->
+                <timestamp/>
+                <logLevel/>
+                <loggerName/>
+                <threadName/>
+                <message/>
+                <formattedMessage/>
+                <mdc/>
+                <stackTrace/>
                 <globalCustomFields>{"app_name":"my-service"}</globalCustomFields>
             </providers>
         </encoder>
     </appender>
 
-    <!-- Root logger -->
+    <!-- JSON в файл с rolling policy -->
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_PATH}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_PATH}.%d{yyyy-MM-dd}.json</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <logLevel/>
+                <loggerName/>
+                <threadName/>
+                <message/>
+                <mdc/>
+                <stackTrace/>
+                <globalCustomFields>{"app_name":"my-service"}</globalCustomFields>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- Root логгер -->
     <root level="INFO">
         <appender-ref ref="JSON_CONSOLE"/>
+        <appender-ref ref="JSON_FILE"/>
     </root>
-
 </configuration>
