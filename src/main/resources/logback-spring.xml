@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+	<springProperty scope="context" name="LOG_FILE_PATH" source="logging.file.name" defaultValue="logs/app-log.json"/>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <!-- Timestamp -->
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+
+                <!-- Log level -->
+                <logLevel />
+
+                <!-- Logger name -->
+                <loggerName />
+
+                <!-- Thread name -->
+                <threadName />
+
+                <!-- Message -->
+                <message />
+
+                <!-- Formatted message -->
+                <formattedMessage />
+
+                <!-- Mapped diagnostic context (MDC) -->
+                <mdc />
+
+                <!-- Stack trace if exception occurs -->
+                <stackTrace />
+
+                <!-- Context info (like application name) -->
+                <context />
+
+                <!-- Custom fields -->
+                <globalCustomFields>{"app_name":"my-service"}</globalCustomFields>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="JSON_CONSOLE"/>
+    </root>
+
+</configuration>
