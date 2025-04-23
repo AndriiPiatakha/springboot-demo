@@ -7,54 +7,30 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class FakeDataService {
 
-    // Симулируем получение данных пользователя
+    // Simulate retrieving user data
     public String getUserData() {
         simulateDelay();
         return "User data: John Doe";
     }
 
-    // Симулируем получение данных счета
+    // Simulate retrieving account data
     public String getAccountData() {
         simulateDelay();
         return "Account data: Balance $1000";
     }
 
-    // Симулируем получение данных о транзакциях
+    // Simulate retrieving transaction data
     public String getTransactionData() {
         simulateDelay();
         return "Transaction data: 3 transactions";
     }
 
-    // Метод для симуляции задержки
+    // Method to simulate delay
     private void simulateDelay() {
         try {
-            TimeUnit.SECONDS.sleep(2); // Задержка в 2 секунды
+            TimeUnit.SECONDS.sleep(2); // 2-second delay
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-    }
-    
-    // ====================
-    
-    public String getUserData(int clientId) {
-        simulateDelay();
-        return "UserData[" + clientId + "]";
-    }
-
-    public String getAccountData(int clientId) {
-        simulateDelay();
-        return "AccountData[" + clientId + "]";
-    }
-
-    public String getTransactionData(int clientId) {
-        simulateDelay();
-        return "TransactionData[" + clientId + "]";
-    }
-    
-    // =====================
-    
-    public String getFakeData(int index) {
-        simulateDelay();
-        return "Response " + index;
     }
 }

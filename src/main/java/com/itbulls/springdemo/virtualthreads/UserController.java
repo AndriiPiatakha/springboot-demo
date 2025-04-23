@@ -9,40 +9,19 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    // Эндпоинт для фетчинга данных
+    // Endpoint to fetch data
     @GetMapping("/fetchData")
     public String fetchData() {
         return userService.fetchAllData();
     }
     
-    // Эндпоинт для фетчинга данных
-    @GetMapping("/fetchData2")
-    public String fetchData2() {
-        return userService.fetchDataForMultipleUsers(3);
-    }
     
-    @GetMapping("/name")
+    @GetMapping("/printThreadName")
     public String getThreadName() {
         return Thread.currentThread().toString();
-    }
-    
-    
-    
-    
-    // ===================================
-    
-    @GetMapping("/virtual")
-    public String runWithVirtualThreads() {
-        return userService.fetchMassiveDataWithVirtualThreads();
-    }
-    
-    @GetMapping("/regular")
-    public String runWithRegularThreads() {
-        return userService.fetchMassiveDataWithRegularThreads();
     }
 }

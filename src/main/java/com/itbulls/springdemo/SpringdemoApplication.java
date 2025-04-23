@@ -15,18 +15,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 
 @SpringBootApplication
-@EnableAsync // Включаем поддержку асинхронных методов
+@EnableAsync // Enable support for asynchronous methods
 public class SpringdemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringdemoApplication.class, args);
 	}
-	
-//	@Bean(name = "taskExecutor")
-//    public Executor taskExecutor() {
-//        return Executors.newVirtualThreadPerTaskExecutor();
-//    }
-	
+		
 //	@Bean(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME)
 //	public AsyncTaskExecutor asyncTaskExecutor() {
 //	  return new TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor());
@@ -39,13 +34,14 @@ public class SpringdemoApplication {
 //	  };
 //	}
 	
+	// Disable Spring Security Login When Needed. 
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-            .csrf().disable()
-            .formLogin().disable()
-            .httpBasic().disable();
+		http
+		    .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+		    .csrf(csrf -> csrf.disable())
+		    .formLogin(form -> form.disable())
+		    .httpBasic(httpBasic -> httpBasic.disable());
         return http.build();
     }
 
