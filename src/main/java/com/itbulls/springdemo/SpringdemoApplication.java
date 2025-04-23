@@ -25,7 +25,6 @@ import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguratio
 @SpringBootApplication
 @EnableAsync // Enable support for asynchronous methods
 @EnableMethodSecurity
-@EnableWebSecurity
 public class SpringdemoApplication {
 
 	public static void main(String[] args) {
@@ -45,41 +44,7 @@ public class SpringdemoApplication {
 //	}
 	
 	
-	
-//	@Bean
-//	public JwtDecoder jwtDecoder() {
-//	    return token -> {
-//	        Jwt jwt = Jwt.withTokenValue(token)
-//	            .header("alg", "none")
-//	            .claim("sub", "demo-user")
-//	            .claim("permissions", List.of("read:payments"))
-//	            .build();
-//
-//	        return jwt;
-//	    };
-//	}
-//	
-//	@Bean
-//	public JwtDecoder jwtDecoder() {
-//	    String secret = "secret"; // <-- это твой ключ
-//	    SecretKey key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
-//	    return NimbusJwtDecoder.withSecretKey(key).build();
-//	}
-	
-	@Bean
-	public JwtAuthenticationConverter jwtAuthenticationConverter() {
-	    // Конвертер для извлечения authorities из claim "scope"
-	    JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-	    authoritiesConverter.setAuthorityPrefix(""); // Убрать префикс "SCOPE_"
-	    authoritiesConverter.setAuthoritiesClaimName("scope"); // Указать нужный claim
-	    System.out.println("====================================");
-	    JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-	    jwtConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
-	    return jwtConverter;
-	}
-	
-	
-	// Disable Spring Security Login When Needed. 
+	// Disable Spring Security Login When Needed. For JMeter test
 //	@Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //		http
@@ -90,12 +55,4 @@ public class SpringdemoApplication {
 //        return http.build();
 //    }
 	
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	    http
-	        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-	        .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
-	    return http.build();
-	}
-
 }
