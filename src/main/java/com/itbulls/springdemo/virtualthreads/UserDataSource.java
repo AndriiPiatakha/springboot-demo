@@ -1,11 +1,11 @@
 package com.itbulls.springdemo.virtualthreads;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-@Service
-public class FakeDataService {
+@Component
+public class UserDataSource {
 
     // Simulate retrieving user data
     public String getUserData() {
