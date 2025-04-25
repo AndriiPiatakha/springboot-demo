@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
-    <!-- Подключаем переменную из application.properties -->
+    <!-- Injecting variable from application.properties -->
     <springProperty scope="context" name="LOG_FILE_PATH" source="logging.file.name" defaultValue="logs/app-log.json"/>
 
-    <!-- JSON в консоль -->
+    <!-- JSON to console -->
     <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
