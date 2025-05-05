@@ -1,5 +1,7 @@
 package com.itbulls.springdemo.structuredlogging;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +19,13 @@ public class PaymentsLoggingController {
     }
 
     @GetMapping("/payments-logging")
-    public String getPayments() {
-    	log.info("Getting payments");
-        return "Payment OK → " + restTemplate.getForObject("http://localhost:8081/fraud-check", String.class);
+    public ResponseEntity<String> getPayments() {
+        log.info("Getting payments");
+        String fraudResult = restTemplate.getForObject("http://localhost:8081/fraud-check", String.class);
+        String response = "Payment OK → " + fraudResult;
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(response);
     }
 }
