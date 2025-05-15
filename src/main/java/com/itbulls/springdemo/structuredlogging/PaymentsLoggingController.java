@@ -22,7 +22,7 @@ public class PaymentsLoggingController {
     public ResponseEntity<String> getPayments() {
         log.info("Getting payments");
         String fraudResult = restTemplate.getForObject("http://localhost:8081/fraud-check", String.class);
-        String response = "Payment OK → " + fraudResult;
+        String response = "Payment OK: " + fraudResult;
 
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_PLAIN)

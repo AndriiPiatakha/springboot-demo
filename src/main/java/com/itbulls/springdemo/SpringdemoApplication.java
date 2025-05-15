@@ -58,6 +58,6 @@ public class SpringdemoApplication {
 
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-	    return builder.build(); // Micrometer автоматически обернёт с трассировкой
+	    return builder.build(); // Micrometer automatically wraps with traceability
 	}
 }
