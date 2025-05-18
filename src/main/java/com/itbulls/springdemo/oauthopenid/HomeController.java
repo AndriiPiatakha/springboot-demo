@@ -1,4 +1,4 @@
-package com.itbulls.springdemo.jwtauthenticationconverter;
+package com.itbulls.springdemo.oauthopenid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

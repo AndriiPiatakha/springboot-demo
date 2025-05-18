@@ -1,4 +1,4 @@
-package com.itbulls.springdemo.jwtauthenticationconverter;
+package com.itbulls.springdemo.oauthopenid;
 
 import java.nio.charset.StandardCharsets;
 
@@ -24,15 +24,10 @@ public class LogoutController {
     @GetMapping("/custom-logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication auth) {
         new SecurityContextLogoutHandler().logout(request, response, auth);
-        String returnTo = UriUtils.encode("http://localhost:8080/logout-success", StandardCharsets.UTF_8);
+        String returnTo = UriUtils.encode("http://localhost:8080/", StandardCharsets.UTF_8);
         String logoutUrl = issuer + "v2/logout?client_id=" + clientId + "&returnTo=" + returnTo;
 
         return "redirect:" + logoutUrl;
     }
-    
-    @GetMapping("/logout-success")
-    public String logoutSuccess() {
-        System.out.println("=====================");
-        return "logout-success";
-    }
+
 }

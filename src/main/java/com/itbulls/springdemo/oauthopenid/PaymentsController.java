@@ -1,4 +1,4 @@
-package com.itbulls.springdemo.jwtauthenticationconverter;
+package com.itbulls.springdemo.oauthopenid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
