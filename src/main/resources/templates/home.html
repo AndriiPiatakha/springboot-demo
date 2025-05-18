@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OIDC Demo</title>
+</head>
+<body>
+<h1>Welcome!</h1>
+<p th:if="${user != null}">
+    Logged in as <strong th:text="${user.fullName}">User</strong><br>
+    Email: <span th:text="${user.email}">email</span><br>
+    <p><a href="/logout">Auth0 Logout</a></p>
+    <p><a href="/custom-logout">Full Logout</a></p>
+</p>
+<p th:if="${user == null}">
+    <a href="/oauth2/authorization/auth0">Login with Auth0</a>
+</p>
+</body>
+</html>

@@ -46,15 +46,15 @@ public class SpringdemoApplication {
 //	}
 
 	// Disable Spring Security Login When Needed. For JMeter test
-	@Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-		    .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-		    .csrf(csrf -> csrf.disable())
-		    .formLogin(form -> form.disable())
-		    .httpBasic(httpBasic -> httpBasic.disable());
-        return http.build();
-    }
+//	@Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//		http
+//		    .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+//		    .csrf(csrf -> csrf.disable())
+//		    .formLogin(form -> form.disable())
+//		    .httpBasic(httpBasic -> httpBasic.disable());
+//        return http.build();
+//    }
 
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
