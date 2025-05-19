@@ -9,9 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -56,6 +58,34 @@ public class SpringdemoApplication {
 //        return http.build();
 //    }
 
+	
+	 // 1. Filter for /payments — JWT only
+    @Bean
+    @Order(1)
+    public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/payments", "/debug") // только для /payments
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+
+        return http.build();
+    }
+
+    // 2. Filter for everything else — login form
+    @Bean
+    @Order(2)
+    public SecurityFilterChain formLoginFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+            )
+            .oauth2Login(Customizer.withDefaults());
+
+        return http.build();
+    }
+	
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 	    return builder.build(); // Micrometer automatically wraps with traceability
