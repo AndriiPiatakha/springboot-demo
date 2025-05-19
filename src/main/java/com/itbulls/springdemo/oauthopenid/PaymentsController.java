@@ -24,4 +24,10 @@ public class PaymentsController {
                    .map(GrantedAuthority::getAuthority)
                    .toList();
     }
+    
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String admin() {
+        return "admin-zone";
+    }
 }
