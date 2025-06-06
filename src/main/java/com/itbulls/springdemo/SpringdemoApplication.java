@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -24,7 +26,24 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
+
+import io.github.bucket4j.distributed.proxy.ProxyManager;
+import io.lettuce.core.RedisClient;
+
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
+import io.lettuce.core.api.StatefulRedisConnection;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
+
+import io.github.bucket4j.distributed.proxy.ProxyManager;
+import io.github.bucket4j.redis.redisson.RedissonBucket4jExtension;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @EnableAsync // Enable support for asynchronous methods
@@ -90,4 +109,32 @@ public class SpringdemoApplication {
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 	    return builder.build(); // Micrometer automatically wraps with traceability
 	}
+	
+	
+	// =================== Rate Limiting Demo
+	
+//    @Bean
+//    public RedisClient redisClient() {
+//        return RedisClient.create("redis://localhost:6379");
+//    }
+//
+//    @Bean
+//    public RedisBucketBuilder bucketBuilder(RedisClient redisClient) {
+//        return Bucket4j.extension(io.github.bucket4j.redis.lettuce.RedisBucket4jExtension.getDefault())
+//                .builder()
+//                .withClient(redisClient);
+//    }
+	
+    @Bean
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://localhost:6379");
+        return Redisson.create(config);
+    }
+
+    @Bean
+    public ProxyManager<String> proxyManager(RedissonClient redissonClient) {
+        return new RedissonBucket4jExtension()
+                .wrap(redissonClient.getMap("buckets"));
+    }
 }
