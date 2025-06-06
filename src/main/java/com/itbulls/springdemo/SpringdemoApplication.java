@@ -1,50 +1,29 @@
 package com.itbulls.springdemo;
 
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.time.Duration;
+import java.util.function.Supplier;
 
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
 
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
+import io.github.bucket4j.redis.lettuce.cas.LettuceBasedProxyManager;
 import io.lettuce.core.RedisClient;
-
-import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import io.lettuce.core.api.StatefulRedisConnection;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
-
-import io.github.bucket4j.distributed.proxy.ProxyManager;
-import io.github.bucket4j.redis.redisson.RedissonBucket4jExtension;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
+import io.lettuce.core.codec.ByteArrayCodec;
+import io.lettuce.core.codec.RedisCodec;
+import io.lettuce.core.codec.StringCodec;
 @SpringBootApplication
 @EnableAsync // Enable support for asynchronous methods
 @EnableMethodSecurity
@@ -113,28 +92,29 @@ public class SpringdemoApplication {
 	
 	// =================== Rate Limiting Demo
 	
-//    @Bean
-//    public RedisClient redisClient() {
-//        return RedisClient.create("redis://localhost:6379");
-//    }
-//
-//    @Bean
-//    public RedisBucketBuilder bucketBuilder(RedisClient redisClient) {
-//        return Bucket4j.extension(io.github.bucket4j.redis.lettuce.RedisBucket4jExtension.getDefault())
-//                .builder()
-//                .withClient(redisClient);
-//    }
-	
     @Bean
-    public RedissonClient redissonClient() {
-        Config config = new Config();
-        config.useSingleServer().setAddress("redis://localhost:6379");
-        return Redisson.create(config);
+    public RedisClient redisClient() {
+        return RedisClient.create("redis://localhost:6379");
     }
 
     @Bean
-    public ProxyManager<String> proxyManager(RedissonClient redissonClient) {
-        return new RedissonBucket4jExtension()
-                .wrap(redissonClient.getMap("buckets"));
+    public ProxyManager<String> proxyManager(RedisClient redisClient) {
+        StatefulRedisConnection<String, byte[]> connection = redisClient.connect(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE));
+        return LettuceBasedProxyManager.builderFor(connection).build();
     }
+    
+    @Bean
+    public Supplier<BucketConfiguration> bucketConfiguration() {
+        return () -> {
+            Bandwidth limit = Bandwidth.builder()
+                    .capacity(10)
+                    .refillGreedy(10, Duration.ofMinutes(1))
+                    .build();
+
+            return BucketConfiguration.builder()
+                    .addLimit(limit)
+                    .build();
+        };
+    }
+	
 }

@@ -80,18 +80,18 @@
 		</dependency>
 		
 		<!-- Bucket4j Core -->
-		<dependency>
-		    <groupId>com.bucket4j</groupId>
-		    <artifactId>bucket4j_jdk17-core</artifactId>
-		    <version>8.14.0</version>
-		</dependency>
+<dependency>
+    <groupId>com.bucket4j</groupId>
+    <artifactId>bucket4j_jdk8-core</artifactId>
+    <version>8.10.1</version>
+</dependency>
 		
 		<!-- Bucket4j Redis Extension -->
-		<dependency>
-		    <groupId>com.bucket4j</groupId>
-		    <artifactId>bucket4j_jdk17-redis</artifactId>
-		    <version>8.14.0</version>
-		</dependency>
+<dependency>
+    <groupId>com.bucket4j</groupId>
+    <artifactId>bucket4j_jdk8-redis</artifactId>
+    <version>8.10.1</version>
+</dependency>
 		
 	    <!-- Redis support via Redisson -->
 	    <dependency>
@@ -101,11 +101,11 @@
 	    </dependency>
 		
 		<!-- Lettuce Redis client -->
-		<dependency>
-		    <groupId>io.lettuce</groupId>
-		    <artifactId>lettuce-core</artifactId>
-		    <version>6.4.2.RELEASE</version><!--$NO-MVN-MAN-VER$-->
-		</dependency>
+	    <dependency>
+	        <groupId>io.lettuce</groupId>
+	        <artifactId>lettuce-core</artifactId>
+	        <version>6.3.1.RELEASE</version>
+	    </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
