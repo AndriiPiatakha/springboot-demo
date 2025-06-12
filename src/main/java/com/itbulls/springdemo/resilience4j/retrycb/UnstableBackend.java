@@ -7,14 +7,14 @@ import java.time.Instant;
 @Service
 public class UnstableBackend {
 
-    public String call() {
+    public String unstableCall() {
         long second = Instant.now().getEpochSecond();
-        System.out.println("Second: " + second);
 
         if (second % 3 != 0) {
-            throw new RuntimeException("Simulated failure");
+            System.out.println("Simulating failure");
+            throw new RuntimeException("Backend failure");
         }
 
-        return "Success at second " + second;
+        return "Success!";
     }
 }

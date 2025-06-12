@@ -21,6 +21,6 @@ public class RetryDemoService {
     }
 
     public String fallback(Throwable t) {
-        return "Fallback triggered at " + Instant.now() + ". Reason: " + t.getMessage();
+        return "Fallback triggered. Reason: " + t.getMessage();
     }
 }

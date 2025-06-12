@@ -16,7 +16,7 @@ public class ReliableService {
     @Retry(name = "backendService")
     @CircuitBreaker(name = "backendService", fallbackMethod = "fallback")
     public String callExternal() {
-        return backend.call();
+        return backend.unstableCall();
     }
 
     public String fallback(Throwable t) {
