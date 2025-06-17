@@ -8,7 +8,7 @@ public class RateLimitedService {
 
     @RateLimiter(name = "apiRateLimiter", fallbackMethod = "rateLimitFallback")
     public String getData() {
-        return "Request successful at " + System.currentTimeMillis();
+        return "Request successful!";
     }
 
     public String rateLimitFallback(Throwable t) {
