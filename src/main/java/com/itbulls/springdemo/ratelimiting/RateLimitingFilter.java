@@ -48,7 +48,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        if ("/printThreadName".equalsIgnoreCase(request.getRequestURI())) {
+        if ("/printThreadName-rate-limit".equalsIgnoreCase(request.getRequestURI())) {
             String ip = request.getRemoteAddr();
             Bucket bucket = resolveBucket(ip);
 

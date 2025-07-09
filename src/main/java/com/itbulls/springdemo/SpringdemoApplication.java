@@ -58,7 +58,7 @@ public class SpringdemoApplication {
 //    @Order(1)
 //    public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
 //        http
-//            .securityMatcher("/payments", "/debug") // только для /payments
+//            .securityMatcher("/payments", "/debug") // only for /payments and /debug
 //            .authorizeHttpRequests(auth -> auth
 //                .anyRequest().authenticated()
 //            )
